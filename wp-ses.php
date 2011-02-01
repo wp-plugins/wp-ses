@@ -2,18 +2,22 @@
 
 /*
 Plugin Name: WP SES
-Version: 0.1.2
+Version: 0.2.1
 Plugin URI: http://wp-ses.com
 Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
 Author: Sylvain Deaure
 Author URI: http://www.blog-expert.fr
 */
 
-define('WPSES_VERSION', 0.12);
+define('WPSES_VERSION', 0.21);
 
 // refs
 // http://aws.amazon.com/fr/
 //
+
+// 0.2.1 : return-path | stats | Quota | Deactivate plugin | Production mode test
+// 0.1.2
+
 
 if (is_admin()) {
 	// TODO : Ask before activate
@@ -38,11 +42,13 @@ function wpses_install() {
 	if (!get_option('wpses_options')) {
 		add_option('wpses_options', array (
 			'from_email' => '',
+			'return_path' => '',
 			'from_name' => 'WordPress',
 			'access_key' => '',
 			'secret_key' => '',
 			'credentials_ok' => 0,
 			'sender_ok' => 0,
+			'last_ses_check'=>0, // timestamp of last quota check
 			'active' => 0, // reset to 0 if not pluggable or config change.
 			'version' => '0' // Version of the db
 			// TODO: garder liste des ids des demandes associées à chaque email.
@@ -116,6 +122,13 @@ function wpses_options() {
 							</div>' . "\n";
 		}
 	}
+	if (!empty ($_POST['deactivate'])) {
+			$wpses_options['active'] = 0;
+			update_option('wpses_options', $wpses_options);
+			echo '<div id="message" class="updated fade">
+							<p>' . __('Plugin de-activated', 'wpses') . '</p>
+							</div>' . "\n";
+	}
 	if (!empty ($_POST['save'])) {
 		//check_admin_referer();
 		//$wpses_options['active'] = trim($_POST['active']);
@@ -124,6 +137,10 @@ function wpses_options() {
 			$wpses_options['active'] = 0;
 		}
 		$wpses_options['from_email'] = trim($_POST['from_email']);
+		$wpses_options['return_path'] = trim($_POST['return_path']);
+		if ($wpses_options['return_path'] =='') {
+			$wpses_options['return_path']=$wpses_options['from_email'];
+		}
 		$wpses_options['from_name'] = trim($_POST['from_name']); //
 		// TODO si mail diffère, relancer procédure check => resetter sender_ok si besoin
 
@@ -150,6 +167,10 @@ function wpses_options() {
 	// envoi mail test
 	if (!empty ($_POST['testemail'])) {
 		wpses_test_email($wpses_options['from_email']);
+	}
+	// envoi mail test prod
+	if (!empty ($_POST['prodemail'])) {
+		wpses_prod_email($_POST['prod_email_to'],$_POST['prod_email_subject'],$_POST['prod_email_content']);
 	}
 
 	include ('admin.tmpl.php');
@@ -178,6 +199,9 @@ function wpses_admin_warnings() {
 
 function wpses_admin_menu() {
 	add_options_page('wpses', __('WP SES', 'wpses'), 8, __FILE__, 'wpses_options');
+	// Quota and Stats
+	add_submenu_page('index.php', 'SES Stats', 'SES Stats', 8, 'wp-ses/ses-stats.php');
+
 }
 
 function wpses_from($mail_from_email) {
@@ -281,6 +305,17 @@ function wpses_test_email($mail) {
 	wpses_message_testdone();
 }
 
+function wpses_prod_email($mail,$subject,$content) {
+	global $wpses_options;
+	global $SES, $WPSESMSG;
+	wpses_check_SES();
+	$WPSESMSG = '';
+	$rid = wpses_mail($mail,$subject,$content);
+	$WPSESMSG .= ' id ' . var_export($rid, true);
+	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("Le message de test a &eacute;t&eacute envoy&eacute;<br />R&eacute;ponse de SES - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
+
+}
+
 // returns msg id
 function wpses_mail($to, $subject, $message, $headers = '') {
 	global $SES;
@@ -295,7 +330,7 @@ function wpses_mail($to, $subject, $message, $headers = '') {
 	$m = new SimpleEmailServiceMessage();
 	$m->addTo($to);
 	$m->setFrom('"' . $wpses_options['from_name'] . '" <' . $wpses_options['from_email'] . ">");
-	$m->setReturnPath($wpses_options['from_email']);
+	$m->setReturnPath($wpses_options['return_path']);
 	$m->setSubject($subject);
 	if ($html == '') { // que texte
 		$m->setMessageFromString($message);

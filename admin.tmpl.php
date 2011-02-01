@@ -41,6 +41,16 @@
   	if ($wpses_options['active']==1) {
   		echo('<li style="color:#0f0;">');
   		_e("Le plugin est actif",'wpses');
+  		echo("<br /><b>");
+  		_e('You can check your sending limits and stats under Dashboard -> SES Stats','wpses');
+  		echo("</b>");
+  		?><form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+  <?php wp_nonce_field('wpses'); ?>
+ <p class="submit">
+  <input type="submit" name="deactivate" value="<?php _e('De-activate Plugin','wpses') ?>" />
+  </p><?php _e('If you want to test further, de-activate the plugin here. Outgoing mails will be delivered by the default wordpress method, but you\'ll still be able to test custom SES email delivery.','wpses') ?>
+   </form>
+   <?php
   	} else {
   		echo('<li style="color:#f00;">');
   		_e("Le plugin n'est pas actif",'wpses');
@@ -49,7 +59,7 @@
   <?php wp_nonce_field('wpses'); ?>
  <p class="submit">
   <input type="submit" name="activate" value="<?php _e('Activer le plugin','wpses') ?>" />
-  </p>
+  </p><?php _e('Warning: Activate only if your account is in production mode.<br />One activated, all outgoing emails will go through Amazon SES and will NOT be sent to any email while in sandbox.','wpses') ?>
    </form>  		
 <?php  	}?></li>
 
@@ -66,6 +76,8 @@
   <td><input type="text" name="from_email" value="<?php echo $wpses_options['from_email']; ?>" />&nbsp;<?php _e('(Doit etre un email valide)','wpses') ?></td></tr>
   <tr><th scope="row"><?php _e('Nom associe','wpses') ?></th>
   <td><input type="text" name="from_name" value="<?php echo $wpses_options['from_name']; ?>" /></td></tr>
+  <tr><th scope="row"><?php _e('Return Path','wpses') ?></th>
+  <td><input type="text" name="return_path" value="<?php echo $wpses_options['return_path']; ?>" />&nbsp;<?php _e('You can specify a return Email (not required).<br />Delivery Status notification messages will be sent to this address.','wpses') ?></td></tr>
   </table>
 
    <h3><?php _e("Cl&eacute;s d'API Amazon",'wpses') ?></h3>
@@ -146,6 +158,23 @@
   <?php wp_nonce_field('wpses'); ?>
  <p class="submit">
   <input type="submit" name="testemail" value="<?php _e("Envoyer l'Email de test",'wpses') ?>" />
+  </p>
+   </form>
+  <br />&nbsp;
+  <h3><?php _e('Production mode test','wpses') ?></h3>
+  <?php _e('Once Amazon did activate your account into production mode, you can begin to send mail to any address<br />Use the form below to test this before fully activating the plugin on your blog.','wpses') ?>
+	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+  <?php wp_nonce_field('wpses'); ?>
+	<table class="form-table" >
+	  <tr><th scope="row"><?php _e('Send email to ','wpses') ?></th>
+	  <td><input type="text" name="prod_email_to" value="" /></td></tr>
+	  <tr><th scope="row"><?php _e('Subject','wpses') ?></th>
+	  <td><input type="text" name="prod_email_subject" value="" /></td></tr>
+	  <tr><th scope="row"><?php _e('Mail content','wpses') ?></th>
+	  <td><textarea cols="80" rows="5" name="prod_email_content"></textarea></td></tr>
+	</table>
+ <p class="submit">
+  <input type="submit" name="prodemail" value="<?php _e("Envoyer l'Email de test en production",'wpses') ?>" />
   </p>
    </form>
   <br />&nbsp;
