@@ -22,12 +22,14 @@ Current features are:
 *	Request confirmation for sender Emails
 *	Test message within Amazon Sandbox mode
 *	Full integration as seamless replacement for wp_mail internal function
+*	Dasboard panel with Quota and statistics
+*	Ability to customize return path for delivery failure notifications
 
 See full features at http://wp-ses.com/features.html
 
 Roadmap
 
-*	Embed SES Statistics
+*	Graphical SES Statistics
 *	Full featured Error management
 *	Control of sending rate
 *	Notice for volume limits
@@ -79,6 +81,15 @@ Please direct your specific Amazon questions to the Amazon support.
 
 == Changelog ==
 
+= 0.2.1 =
+Added some functions
+
+* SES Quota display
+* SES Statistics
+* Can set email return_path
+* Full email test form
+* Can partially de-activate plugin for intensive testing.
+
 = 0.1.2 =
 First public Beta release
 
@@ -90,6 +101,9 @@ First public Beta release
 * Proof of concept
 
 == Upgrade Notice ==
+
+= 0.2.1 =
+Quota and statistics Integration
 
 = 0.1.2 =
 First public Beta release
