@@ -1,0 +1,221 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPSES\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-30 12:27+0100\n"
+"PO-Revision-Date: 2011-01-30 15:29+0100\n"
+"Last-Translator: Sylvain <syl@sylvain-deaure.fr>\n"
+"Language-Team: Sylvain Deaure\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED KINGDOM\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: W:\\var\\www\\wp3\\wp-content\\plugins\\wp-ses\n"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:3
+msgid "Options WP SES"
+msgstr "WP SES Options"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:8
+msgid "Etat du plugin"
+msgstr "Plugin State"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:8
+msgid "Actualiser"
+msgstr "Refresh"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:14
+msgid "L'adresse exp&eacute;diteur est d&eacute;finie "
+msgstr "Sender Email is set"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:17
+msgid "L'adresse exp&eacute;diteur n'est pas d&eacute;finie "
+msgstr "Sender Email is not set"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:22
+msgid "Les cl&eacute;s Amazon sont valides"
+msgstr "Amazon API Keys are valid."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:25
+msgid "Les cl&eacute;s Amazon sont invalides, ou vous n'avez pas finalis&eacute; votre inscription &agrave; SES"
+msgstr "Amazon API Keys are not valid, or you did not finalize youy Amazon SES registration."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:30
+msgid "L'adresse exp&eacute;diteur a &eacute;t&eacute; valid&eacute;e"
+msgstr "Sender Email has been confirmed."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:33
+msgid "L'adresse exp&eacute;diteur n'a pas &eacute;t&eacute; valid&eacute;e"
+msgstr "Sender Email has not been confirmed yet."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:39
+msgid "Le plugin est actif"
+msgstr "Plugin is active."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:42
+msgid "Le plugin n'est pas actif"
+msgstr "Plugin is not active."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:47
+msgid "Activer le plugin"
+msgstr "Activate plugin"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:56
+msgid "Adresse Exp&eacute;diteur"
+msgstr "Sender Email"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:57
+msgid "Ces deux r&eacute;glages remplacent l'email par d&eacute;faut utilis&eacute;e comme adresse d'exp&eacute;diteur de votre blog."
+msgstr "These settings do replace default sender email used by your blog."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:61
+msgid "Adresse expediteur"
+msgstr "Sender Email"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:62
+msgid "(Doit etre un email valide)"
+msgstr "(Has to be a valid Email)"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:63
+msgid "Nom associe"
+msgstr "Name"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:67
+msgid "Cl&eacute;s d'API Amazon"
+msgstr "Amazon API Keys"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:68
+msgid "Indiquez ici les cl&eacute;s API fournies par Amazon Web service"
+msgstr "Please insert here your API keys given by the Amazon Web Services."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:70
+msgid "access_key"
+msgstr "access_key"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:72
+msgid "secret_key"
+msgstr "secret_key"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:79
+msgid "Save Changes"
+msgstr "Save Changes"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:85
+msgid "Exp&eacute;diteurs v&eacute;rifi&eacute;s"
+msgstr "Confirmed senders"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:86
+msgid "Les exp&eacute;diteurs suivants sont connus"
+msgstr "The following senders are known:"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:94
+msgid "Email"
+msgstr "Email"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:94
+msgid "Id Demande"
+msgstr "Request Id"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:94
+msgid "Valid&eacute;"
+msgstr "Confirmed"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:109
+msgid "Oui"
+msgstr "Yes"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:111
+msgid "Non"
+msgstr "No"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:125
+msgid "Demander l'ajout de "
+msgstr "Add the following email: "
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:125
+msgid " aux exp&eacute;diteurs."
+msgstr " to senders."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:128
+msgid "Ajouter cet Email"
+msgstr "Add this Email"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:133
+msgid "Email de test"
+msgstr "Test Email"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:134
+msgid "Cliquer sur le bouton ci-dessous pour envoyer &agrave; l'adresse exp&eacute;diteur un email de test via Amazon SES."
+msgstr "Click on this button to send a test email (via amazon SES) to the sender email."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:140
+msgid "Envoyer l'Email de test"
+msgstr "Send Test Email"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/admin.tmpl.php:145
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:281
+msgid "WP SES est un plugin de"
+msgstr "WP SES is a plugin by"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/sdrssw.php:48
+msgid "S'abonner au flux RSS"
+msgstr "Subscribe to RSS"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/sdrssw.php:60
+msgid "En direct de Blog Expert..."
+msgstr "Live from Blog Expert..."
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:117
+msgid "Plugin activ&eacute;"
+msgstr "Plugin is activated and functionnal"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:143
+msgid "R&eacute;glages sauvegard&eacute;s"
+msgstr "Settings updated"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:173
+msgid "WP SES - Simple Email Service n'est pas en fonction, v&eacute;rifiez sa configuration: "
+msgstr "WP SES - Simple Email Service is not fully activated. Please check it's config:"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:182
+msgid "WP SES"
+msgstr "WP SES"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:207
+msgid "Une demande de validation a &eacute;t&eacute; faite. Vous allez recevoir &agrave; l'adresse indiqu&eacute;e un email de confirmation de Amazon SES. Vous DEVEZ cliquer sur le lien pr&eacute;sent dans cet email pour valider votre adresse d'exp&eacute;diteur.<br />R&eacute;ponse de SES - "
+msgstr "A confirmation request has been sent. You will receive at the stated email a confirmation request from amazon SES. You MUST click on the provided link in order to confirm your sender Email.<br />SES Answer - "
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:232
+msgid "Erreur SES: "
+msgstr "SES Error:"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:263
+msgid "Exception re&ccedil;ue : "
+msgstr "Got exception: "
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:273
+msgid "Le message de test a &eacute;t&eacute envoy&eacute; &agrave; votre adresse d'exp&eacute;diteur.<br />R&eacute;ponse de SES - "
+msgstr "Test message has been sent to your sender Email address.<br />SES Answer - "
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:281
+msgid "WP SES - Message de Test"
+msgstr "WP SES - Test Message"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:281
+msgid ""
+"Ceci est le message de test de WP SES. Il a ete envoye via Amazon SES.\n"
+"Tout semble donc fonctionner, bravo !\n"
+"\n"
+msgstr ""
+"This is WP SES Test message. It has been sent via Amazon SES Service.\n"
+"All looks fine !\n"
+"\n"
+
+#: W:\var\www\wp3\wp-content\plugins\wp-ses/wp-ses.php:332
+msgid "Un autre plugin a red&eacute;fini wp_mail. D&eacute;sactivez le plugin tiers pour que wp-ses fonctionne."
+msgstr "Another plugin did override wp-mail function. Please de-activate the other plugin if you want WP SES to work properly."
+
