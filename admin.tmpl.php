@@ -1,11 +1,11 @@
  <div class="wrap">
  <div id="icon-options-general" class="icon32"><br /></div>
-  <h2><?php _e('Options WP SES','wpses') ?></h2>
+  <h2><?php _e('WP SES Options','wpses') ?></h2>
    <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
   <?php wp_nonce_field('wpses'); ?>
 
 
-  <h3><?php _e('Etat du plugin','wpses') ?>&nbsp;<input type="submit" name="refresh" value="<?php _e('Actualiser','wpses') ?>" /></h3>
+  <h3><?php _e('Plugin State','wpses') ?>&nbsp;<input type="submit" name="refresh" value="<?php _e('Refresh','wpses') ?>" /></h3>
    </form>  
    <div style="border:1px solid#ccc; padding:10px; float:right; ">
    Don't forget to check online FAQs on <a href="http://wp-ses.com/" target="_blank">WP-SES</a> website.<br />
@@ -15,32 +15,32 @@
   <?php
   	if ($wpses_options['from_email']!='') {
   		echo('<li style="color:#0f0;">');
-  		_e("L'adresse exp&eacute;diteur est d&eacute;finie ",'wpses');
+  		_e("Sender Email is set ",'wpses');
   	} else {
   		echo('<li style="color:#f00;">');
-  		_e("L'adresse exp&eacute;diteur n'est pas d&eacute;finie ",'wpses');  		
+  		_e("Sender Email is not set ",'wpses');  		
   	}?></li>
   <?php
   	if ($wpses_options['credentials_ok']==1) {
   		echo('<li style="color:#0f0;">');
-  		_e("Les cl&eacute;s Amazon sont valides",'wpses');
+  		_e("Amazon API Keys are valid",'wpses');
   	} else {
   		echo('<li style="color:#f00;">');
-  		_e("Les cl&eacute;s Amazon sont invalides, ou vous n'avez pas finalis&eacute; votre inscription &agrave; SES",'wpses');  		
+  		_e("Amazon API Keys are not valid, or you did not finalize youy Amazon SES registration.",'wpses');  		
   	}?></li>
  <?php
   	if (($wpses_options['from_email']!='') and ($senders[$wpses_options['from_email']][1])) {
   		echo('<li style="color:#0f0;">');
-  		_e("L'adresse exp&eacute;diteur a &eacute;t&eacute; valid&eacute;e",'wpses');
+  		_e("Sender Email has been confirmed.",'wpses');
   	} else {
   		echo('<li style="color:#f00;">');
-  		_e("L'adresse exp&eacute;diteur n'a pas &eacute;t&eacute; valid&eacute;e",'wpses');  		
+  		_e("Sender Email has not been confirmed yet.",'wpses');  		
   	}?></li>  	
 
    <?php
   	if ($wpses_options['active']==1) {
   		echo('<li style="color:#0f0;">');
-  		_e("Le plugin est actif",'wpses');
+  		_e("Plugin is active.",'wpses');
   		echo("<br /><b>");
   		_e('You can check your sending limits and stats under Dashboard -> SES Stats','wpses');
   		echo("</b>");
@@ -53,12 +53,12 @@
    <?php
   	} else {
   		echo('<li style="color:#f00;">');
-  		_e("Le plugin n'est pas actif",'wpses');
+  		_e("Plugin is not active.",'wpses');
   		?>
   		 <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
   <?php wp_nonce_field('wpses'); ?>
  <p class="submit">
-  <input type="submit" name="activate" value="<?php _e('Activer le plugin','wpses') ?>" />
+  <input type="submit" name="activate" value="<?php _e('Activate plugin','wpses') ?>" />
   </p><?php _e('Warning: Activate only if your account is in production mode.<br />One activated, all outgoing emails will go through Amazon SES and will NOT be sent to any email while in sandbox.','wpses') ?>
    </form>  		
 <?php  	}?></li>
@@ -67,25 +67,25 @@
 
 
   </ul>
-  <h3><?php _e('Adresse Exp&eacute;diteur','wpses') ?></h3>
-  <?php _e('Ces deux r&eacute;glages remplacent l\'email par d&eacute;faut utilis&eacute;e comme adresse d\'exp&eacute;diteur de votre blog.','wpses') ?>
+  <h3><?php _e('Sender Email','wpses') ?></h3>
+  <?php _e('These settings do replace default sender email used by your blog.','wpses') ?>
   <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
   <?php wp_nonce_field('wpses'); ?>
   <table class="form-table">
-  <tr><th scope="row"><?php _e('Adresse expediteur','wpses') ?></th>
-  <td><input type="text" name="from_email" value="<?php echo $wpses_options['from_email']; ?>" />&nbsp;<?php _e('(Doit etre un email valide)','wpses') ?></td></tr>
-  <tr><th scope="row"><?php _e('Nom associe','wpses') ?></th>
+  <tr><th scope="row"><?php _e('Sender Email','wpses') ?></th>
+  <td><input type="text" name="from_email" value="<?php echo $wpses_options['from_email']; ?>" />&nbsp;<?php _e('(Has to be a valid Email)','wpses') ?></td></tr>
+  <tr><th scope="row"><?php _e('Name','wpses') ?></th>
   <td><input type="text" name="from_name" value="<?php echo $wpses_options['from_name']; ?>" /></td></tr>
   <tr><th scope="row"><?php _e('Return Path','wpses') ?></th>
   <td><input type="text" name="return_path" value="<?php echo $wpses_options['return_path']; ?>" />&nbsp;<?php _e('You can specify a return Email (not required).<br />Delivery Status notification messages will be sent to this address.','wpses') ?></td></tr>
   </table>
 
-   <h3><?php _e("Cl&eacute;s d'API Amazon",'wpses') ?></h3>
+   <h3><?php _e("Amazon API Keys",'wpses') ?></h3>
 	<div style="border:1px solid#ccc; padding:10px; float:right; ">
   If you already use an Amazon Webservice like S3,<br />
   you can use the very same keys here.
    </div>
-  <?php _e('Indiquez ici les cl&eacute;s API fournies par Amazon Web service','wpses') ?>
+  <?php _e('Please insert here your API keys given by the Amazon Web Services.','wpses') ?>
   <table class="form-table" style="width:450px; float:left;" width="450">
   <tr><th scope="row"><?php _e('access_key','wpses') ?></th>
   <td><input type="text" name="access_key" value="<?php echo $wpses_options['access_key']; ?>" /></td></tr>
@@ -101,9 +101,9 @@
   </form>
   <br />&nbsp;
 
-
-  <h3><?php _e("Exp&eacute;diteurs v&eacute;rifi&eacute;s",'wpses') ?></h3>
-  <?php _e('Les exp&eacute;diteurs suivants sont connus','wpses') ?>
+  <h3><?php _e("Confirmed senders",'wpses') ?></h3>
+  <?php _e('Only confirmed senders are able to send an email via SES','wpses') ?><br />
+  <?php _e('The following senders are known:','wpses') ?>
   <br />
   <?php 
   //print_r($autorized); 
@@ -111,7 +111,7 @@
   ?>
   <div style="width:70%">
   <table class="form-table">
-  <tr style="background-color:#ccc; font-weight:bold;"><td><?php _e('Email','wpses') ?></td><td><?php _e('Id Demande','wpses') ?></td><td><?php _e('Valid&eacute;','wpses') ?></td></tr>
+  <tr style="background-color:#ccc; font-weight:bold;"><td><?php _e('Email','wpses') ?></td><td><?php _e('Request Id','wpses') ?></td><td><?php _e('Confirmed','wpses') ?></td></tr>
   <? 
   $i=0;
   foreach ($senders as $email=>$props) {
@@ -126,9 +126,9 @@
   	print_r($props[0]);
   	echo("</td>");
   	if ($props[1]) {
-  		$valide=__('Oui','wpses');
+  		$valide=__('Yes','wpses');
   	} else {
-  		$valide=__('Non','wpses');
+  		$valide=__('No','wpses');
   	}
   	echo("<td>".$valide."</td>");
   	echo("</tr>");
@@ -142,22 +142,22 @@
   <?php wp_nonce_field('wpses'); ?>
   <!-- todo : que si email defini. -->
   <br />
-<?php _e('Demander l\'ajout de ','wpses') ?><?php echo $wpses_options['from_email']; ?><?php _e(' aux exp&eacute;diteurs.','wpses') ?>
+<?php _e('Add the following email: ','wpses') ?><?php echo $wpses_options['from_email']; ?><?php _e(' to senders.','wpses') ?>
 
  <p class="submit">
-  <input type="submit" name="addemail" value="<?php _e('Ajouter cet Email','wpses') ?>" />
+  <input type="submit" name="addemail" value="<?php _e('Add this Email','wpses') ?>" />
   </p>
    </form>
   <br />&nbsp;
 
-   <h3><?php _e('Email de test','wpses') ?></h3>
-  <?php _e('Cliquer sur le bouton ci-dessous pour envoyer &agrave; l\'adresse exp&eacute;diteur un email de test via Amazon SES.','wpses') ?>
+   <h3><?php _e('Test Email','wpses') ?></h3>
+  <?php _e('Click on this button to send a test email (via amazon SES) to the sender email.','wpses') ?>
   <br />
  <!-- todo: que si email expediteur validé -->
    <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
   <?php wp_nonce_field('wpses'); ?>
  <p class="submit">
-  <input type="submit" name="testemail" value="<?php _e("Envoyer l'Email de test",'wpses') ?>" />
+  <input type="submit" name="testemail" value="<?php _e("Send Test Email",'wpses') ?>" />
   </p>
    </form>
   <br />&nbsp;
@@ -174,12 +174,12 @@
 	  <td><textarea cols="80" rows="5" name="prod_email_content"></textarea></td></tr>
 	</table>
  <p class="submit">
-  <input type="submit" name="prodemail" value="<?php _e("Envoyer l'Email de test en production",'wpses') ?>" />
+  <input type="submit" name="prodemail" value="<?php _e("Send Full Test Email",'wpses') ?>" />
   </p>
    </form>
   <br />&nbsp;
 
-  <?php _e('WP SES est un plugin de','wpses') ?> <a href="http://www.blog-expert.fr/" target="_blank">http://www.blog-expert.fr/</a>
+  <?php _e('WP SES is a plugin by','wpses') ?> <a href="http://www.blog-expert.fr/" target="_blank">http://www.blog-expert.fr/</a>
    <br />&nbsp;
    <div style="width:80%">
   <?php

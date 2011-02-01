@@ -45,7 +45,7 @@ if (!function_exists('sd_rss_widget')) {
 			}
 			echo '</ul>';
 			echo '<div style="border-top: 1px solid #ddd; padding-top: 10px; text-align:center;">';
-			echo '<a href="http://www.blog-expert.fr/feed/"><img src="' . get_bloginfo('wpurl') . '/wp-includes/images/rss.png" alt=""/>&nbsp;' . __('S\'abonner au flux RSS', 'wpses') . '</a>';
+			echo '<a href="http://www.blog-expert.fr/feed/"><img src="' . get_bloginfo('wpurl') . '/wp-includes/images/rss.png" alt=""/>&nbsp;' . __('Subscribe to RSS', 'wpses') . '</a>';
 			if ($image == 'normal') {
 				echo ' &nbsp; &nbsp; &nbsp; ';
 			} else {
@@ -57,7 +57,7 @@ if (!function_exists('sd_rss_widget')) {
 	}
 
 	function sd_widget_setup() {
-		wp_add_dashboard_widget('sd_rss_widget', __('En direct de Blog Expert...', 'wpses'), 'sd_rss_widget');
+		wp_add_dashboard_widget('sd_rss_widget', __('Live from Blog Expert...', 'wpses'), 'sd_rss_widget');
 	}
 
 	add_action('wp_dashboard_setup', 'sd_widget_setup');

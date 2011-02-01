@@ -99,7 +99,7 @@ foreach ($stats['SendDataPoints'] as $point) {
 </table>
  <br />&nbsp;
 
-  <?php _e('WP SES est un plugin de','wpses') ?> <a href="http://www.blog-expert.fr/" target="_blank">http://www.blog-expert.fr/</a>
+  <?php _e('WP SES is a plugin by','wpses') ?> <a href="http://www.blog-expert.fr/" target="_blank">http://www.blog-expert.fr/</a>
   <br />&nbsp;
   <div style="width:80%">
 	<?php

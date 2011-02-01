@@ -2,21 +2,31 @@
 
 /*
 Plugin Name: WP SES
-Version: 0.2.1
+Version: 0.2.2
 Plugin URI: http://wp-ses.com
 Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
 Author: Sylvain Deaure
 Author URI: http://www.blog-expert.fr
 */
 
-define('WPSES_VERSION', 0.21);
+define('WPSES_VERSION', 0.22);
 
 // refs
 // http://aws.amazon.com/fr/
 //
 
+// 0.2.2 : Reference language is now english
 // 0.2.1 : return-path | stats | Quota | Deactivate plugin | Production mode test
 // 0.1.2
+
+// TODO
+// stats cache (beware of directory)
+// logs of mails sent (inc details ?)
+// traiter les erreurs (stocker contenu) pour les re-tenter plus tard ?
+// Mailqueue
+// limits (check once per hour (or  faster) and stop if near limit)
+// blacklist, mail delivery handling
+// dashboard integration (main stats without extra page)
 
 
 if (is_admin()) {
@@ -118,7 +128,7 @@ function wpses_options() {
 			$wpses_options['active'] = 1;
 			update_option('wpses_options', $wpses_options);
 			echo '<div id="message" class="updated fade">
-							<p>' . __('Plugin activ&eacute;', 'wpses') . '</p>
+							<p>' . __('Plugin is activated and functionnal', 'wpses') . '</p>
 							</div>' . "\n";
 		}
 	}
@@ -155,7 +165,7 @@ function wpses_options() {
 
 		update_option('wpses_options', $wpses_options);
 		echo '<div id="message" class="updated fade">
-																											<p>' . __('R&eacute;glages sauvegard&eacute;s', 'wpses') . '</p>
+																											<p>' . __('Settings updated', 'wpses') . '</p>
 																											</div>' . "\n";
 	}
 	$wpses_options = get_option('wpses_options');
@@ -189,8 +199,8 @@ function wpses_admin_warnings() {
 	if ($active <= 0) {
 		function wpses_warning() {
 			global $wpses_options;
-			echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("WP SES - Simple Email Service n'est pas en fonction, v&eacute;rifiez sa configuration: ", 'wpses') .
-			'<a href="options-general.php?page=wp-ses/wp-ses.php">R&eacute;glages &rarr; WP SES</a>.' . "</p></div>";
+			echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("WP SES - Simple Email Service is not fully activated. Please check it's config: ", 'wpses') .
+			'<a href="options-general.php?page=wp-ses/wp-ses.php">'.__("Settings &rarr; WP SES",'wpses').'</a>.' . "</p></div>";
 		}
 		add_action('admin_notices', 'wpses_warning');
 		return;
@@ -226,7 +236,7 @@ function wpses_from_name($mail_from_name) {
 
 function wpses_message_step1done() {
 	global $WPSESMSG;
-	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("Une demande de validation a &eacute;t&eacute; faite. Vous allez recevoir &agrave; l'adresse indiqu&eacute;e un email de confirmation de Amazon SES. Vous DEVEZ cliquer sur le lien pr&eacute;sent dans cet email pour valider votre adresse d'exp&eacute;diteur.<br />R&eacute;ponse de SES - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
+	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("A confirmation request has been sent. You will receive at the stated email a confirmation request from amazon SES. You MUST click on the provided link in order to confirm your sender Email.<br />SES Answer - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
 }
 
 function wpses_getverified() {
@@ -251,7 +261,7 @@ function wpses_check_SES() {
 
 function wpses_error_handler($level, $message, $file, $line, $context) {
 	global $WPSESMSG;
-	$WPSESMSG = __('Erreur SES: ', 'wpses') . $message;
+	$WPSESMSG = __('SES Error: ', 'wpses') . $message;
 	return (true); //And prevent the PHP error handler from continuing
 }
 
@@ -282,7 +292,7 @@ function wpses_verify_sender_step1($mail) {
 		//echo("rid ");
 		//print_r($rid);
 	} catch (Exception $e) {
-		$WPSESMSG = __('Exception re&ccedil;ue : ','wpses') . $e->getMessage() . "\n";
+		$WPSESMSG = __('Got exception: ','wpses') . $e->getMessage() . "\n";
 	}
 	//restore_error_handler();
 	$WPSESMSG .= ' id ' . var_export($rid, true);
@@ -292,7 +302,7 @@ function wpses_verify_sender_step1($mail) {
 
 function wpses_message_testdone() {
 	global $WPSESMSG;
-	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("Le message de test a &eacute;t&eacute envoy&eacute; &agrave; votre adresse d'exp&eacute;diteur.<br />R&eacute;ponse de SES - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
+	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("Test message has been sent to your sender Email address.<br />SES Answer - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
 }
 
 function wpses_test_email($mail) {
@@ -300,7 +310,7 @@ function wpses_test_email($mail) {
 	global $SES, $WPSESMSG;
 	wpses_check_SES();
 	$WPSESMSG = '';
-	$rid = wpses_mail($wpses_options['from_email'], __('WP SES - Message de Test','wpses'), __("Ceci est le message de test de WP SES. Il a ete envoye via Amazon SES.\nTout semble donc fonctionner, bravo !\n\n",'wpses') . __('WP SES est un plugin de', 'wpses') . ' http://www.blog-expert.fr/');
+	$rid = wpses_mail($wpses_options['from_email'], __('WP SES - Test Message','wpses'), __("This is WP SES Test message. It has been sent via Amazon SES Service.\nAll looks fine !\n\n",'wpses') . __('WP SES is a plugin by', 'wpses') . ' http://www.blog-expert.fr/');
 	$WPSESMSG .= ' id ' . var_export($rid, true);
 	wpses_message_testdone();
 }
@@ -312,7 +322,7 @@ function wpses_prod_email($mail,$subject,$content) {
 	$WPSESMSG = '';
 	$rid = wpses_mail($mail,$subject,$content);
 	$WPSESMSG .= ' id ' . var_export($rid, true);
-	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("Le message de test a &eacute;t&eacute envoy&eacute;<br />R&eacute;ponse de SES - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
+	echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __("Test message has been sent.<br />SES Answer - ", 'wpses') . $WPSESMSG . "</strong></p></div>";
 
 }
 
@@ -362,7 +372,7 @@ if ($wpses_options['active'] == 1) {
 		}
 	} else {
 		function wpses_warningmail() {
-			echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __('Un autre plugin a red&eacute;fini wp_mail. D&eacute;sactivez le plugin tiers pour que wp-ses fonctionne.', 'wpses') . "</strong></p></div>";
+			echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __('Another plugin did override wp-mail function. Please de-activate the other plugin if you want WP SES to work properly.', 'wpses') . "</strong></p></div>";
 		}
 		add_action('admin_notices', 'wpses_warningmail');
 		// Désactiver "active" si actif.

@@ -81,6 +81,10 @@ Please direct your specific Amazon questions to the Amazon support.
 
 == Changelog ==
 
+= 0.2.2 =
+Reference Language is now English.
+WP SES est fourni avec les textes en Francais.
+
 = 0.2.1 =
 Added some functions
 
@@ -101,6 +105,9 @@ First public Beta release
 * Proof of concept
 
 == Upgrade Notice ==
+
+= 0.2.2 =
+All default strings are now in english.
 
 = 0.2.1 =
 Quota and statistics Integration
