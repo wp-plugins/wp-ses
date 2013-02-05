@@ -3,7 +3,7 @@ Contributors: SylvainDeaure
 Donate link: http://wp-ses.com/donate.html
 Tags: email,ses,amazon,webservice,delivrability,newsletter,autoresponder,mail,wp_mail,smtp,service
 Requires at least: 3.0.0
-Tested up to: 3.0.4
+Tested up to: 3.5.1
 Stable tag: trunk
 
 WP-SES redirects all outgoing WordPress emails through Amazon Simple Email Service (SES) for maximum email delivrability.
@@ -37,7 +37,7 @@ Roadmap
 
 
 You can read more about Amazon SES here : http://aws.amazon.com/ses/
-
+This plugin uses the Amazon Simple Email Service PHP class at http://sourceforge.net/projects/php-aws-ses/
 
 == Installation ==
 
@@ -81,6 +81,15 @@ Please direct your specific Amazon questions to the Amazon support.
 
 == Changelog ==
 
+= 0.2.9 =
+* Updated SES access class
+* WP 3.5.1 compatibility
+* Stats sorting
+* Allow Removal of verified e-mail address
+* Added wp_mail filter
+* "Forgotten password" link is now ok.
+* Various bugfixes
+
 = 0.2.2 =
 Reference Language is now English.
 WP SES est fourni avec les textes en Francais.
@@ -105,6 +114,9 @@ First public Beta release
 * Proof of concept
 
 == Upgrade Notice ==
+
+= 0.2.9 =
+Pre-release, mainly bugfixes, before another update.
 
 = 0.2.2 =
 All default strings are now in english.

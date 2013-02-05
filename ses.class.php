@@ -40,8 +40,8 @@
 /**
 * Amazon SimpleEmailService PHP class
 *
-* @link http://sourceforge.net/projects/php-ses/
-* version 0.8.0
+* @link http://sourceforge.net/projects/php-aws-ses/
+* version 0.8.2
 *
 */
 class SimpleEmailService
@@ -94,7 +94,7 @@ class SimpleEmailService
 
 	/**
 	* Lists the email addresses that have been verified and can be used as the 'From' address
-	*
+	* 
 	* @return An array containing two items: a list of verified email addresses, and the request id.
 	*/
 	public function listVerifiedEmailAddresses() {
@@ -261,6 +261,7 @@ class SimpleEmailService
 	*/
 	public function sendEmail($sesMessage) {
 		if(!$sesMessage->validate()) {
+			$this->__triggerError('sendEmail', 'Message failed validation.');
 			return false;
 		}
 
@@ -361,22 +362,9 @@ class SimpleEmailService
 			$message = sprintf("SimpleEmailService::%s(): %s - %s: %s\nRequest Id: %s\n", $functionname, $e['Type'], $e['Code'], $e['Message'], $error['RequestId']);
 			trigger_error($message, E_USER_WARNING);
 		}
-	}
-
-	/**
-	* Callback handler for 503 retries.
-	*
-	* @internal Used by SimpleDBRequest to call the user-specified callback, if set
-	* @param $attempt The number of failed attempts so far
-	* @return The retry delay in microseconds, or 0 to stop retrying.
-	*/
-	public function __executeServiceTemporarilyUnavailableRetryDelay($attempt)
-	{
-		if(is_callable($this->__serviceUnavailableRetryDelayCallback)) {
-			$callback = $this->__serviceUnavailableRetryDelayCallback;
-			return $callback($attempt);
+		else {
+			trigger_error(sprintf("SimpleEmailService::%s(): Encountered an error: %s", $functionname, $error), E_USER_WARNING);
 		}
-		return 0;
 	}
 }
 
@@ -490,7 +478,7 @@ final class SimpleEmailServiceRequest
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
 		curl_setopt($curl, CURLOPT_WRITEFUNCTION, array(&$this, '__responseWriteCallback'));
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		@ curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
 		// SD (option ?)
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -582,21 +570,21 @@ final class SimpleEmailServiceMessage {
 	public $subjectCharset, $messageTextCharset, $messageHtmlCharset;
 
 	function __construct() {
-		$to = array();
-		$cc = array();
-		$bcc = array();
-		$replyto = array();
+		$this->to = array();
+		$this->cc = array();
+		$this->bcc = array();
+		$this->replyto = array();
 
-		$from = null;
-		$returnpath = null;
+		$this->from = null;
+		$this->returnpath = null;
 
-		$subject = null;
-		$messagetext = null;
-		$messagehtml = null;
+		$this->subject = null;
+		$this->messagetext = null;
+		$this->messagehtml = null;
 
-		$subjectCharset = null;
-		$messageTextCharset = null;
-		$messageHtmlCharset = null;
+		$this->subjectCharset = null;
+		$this->messageTextCharset = null;
+		$this->messageHtmlCharset = null;
 	}
 
 
@@ -665,9 +653,26 @@ final class SimpleEmailServiceMessage {
 	function setMessageFromFile($textfile, $htmlfile = null) {
 		if(file_exists($textfile) && is_file($textfile) && is_readable($textfile)) {
 			$this->messagetext = file_get_contents($textfile);
+		} else {
+			$this->messagetext = null;
 		}
 		if(file_exists($htmlfile) && is_file($htmlfile) && is_readable($htmlfile)) {
 			$this->messagehtml = file_get_contents($htmlfile);
+		} else {
+			$this->messagehtml = null;
+		}
+	}
+
+	function setMessageFromURL($texturl, $htmlurl = null) {
+		if($texturl !== null) {
+			$this->messagetext = file_get_contents($texturl);
+		} else {
+			$this->messagetext = null;
+		}
+		if($htmlurl !== null) {
+			$this->messagehtml = file_get_contents($htmlurl);
+		} else {
+			$this->messagehtml = null;
 		}
 	}
 
@@ -693,8 +698,14 @@ final class SimpleEmailServiceMessage {
 			return false;
 		if($this->from == null || strlen($this->from) == 0)
 			return false;
-		if($this->messagetext == null)
+		// messages require at least one of: subject, messagetext, messagehtml.
+		if(($this->subject == null || strlen($this->subject) == 0)
+			&& ($this->messagetext == null || strlen($this->messagetext) == 0)
+			&& ($this->messagehtml == null || strlen($this->messagehtml) == 0))
+		{
 			return false;
+		}
+
 		return true;
 	}
 }
