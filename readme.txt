@@ -24,6 +24,8 @@ Current features are:
 *	Full integration as seamless replacement for wp_mail internal function
 *	Dasboard panel with Quota and statistics
 *	Ability to customize return path for delivery failure notifications
+*       Custom Reply-To or from Headers
+*       Default config values for centralised WPMU setups
 
 See full features at http://wp-ses.com/features.html
 
@@ -75,11 +77,50 @@ Please use our main website http://wp-ses.com/faq.html for all support related q
 We are not otherwise linked to Amazon or Amazon Services.
 Please direct your specific Amazon questions to the Amazon support.
 
+= How to setup default values for a WPMU install ? =
+
+Please, DO test your setting without this.
+Then, when all works as expected, fill in the config file.
+
+Edit the wp-config.php file, and add what you want to define. Here is a complete setup, some defines are optionnal.
+
+// WP-SES defines
+
+// Amazon Access Key
+define('WP_SES_ACCESS_KEY','blablablakey');
+// Amazon Secret Key
+define('WP_SES_SECRET_KEY','blablablasecret');
+
+// From mail (optionnal) must be an amazon SES validated email
+// hard coded email, leave empty or comment out to allow custom setting via panel
+define('WP_SES_FROM','me@....');
+
+// Return path for bounced emails (optionnal)
+// hard coded email, leave empty or comment out to allow custom setting via panel
+define('WP_SES_RETURNPATH','return@....');
+
+// ReplyTo (optionnal) - This will get the replies from the recipients.
+// hard coded email, or 'headers' for using the 'replyto' from the headers. 
+// Leave empty or comment out to allow custom setting via panel
+define('WP_SES_REPLYTO','headers');
+
+// Hide list of verified emails (optionnal)
+define('WP_SES_HIDE_VERIFIED',true);
+
+// Hide SES Stats panel (optionnal)
+define('WP_SES_HIDE_STATS',true);
+
+
+
 == Screenshots ==
 
 1. the settings screen of WP-SES plugin.
 
 == Changelog ==
+
+= 0.3.1 =
+* Added Reply-To
+* Added global WPMU setup (To be fully tested)
 
 = 0.2.9 =
 * Updated SES access class

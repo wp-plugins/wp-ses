@@ -2,18 +2,19 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.2.9
+  Version: 0.3.1
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.29);
+define('WPSES_VERSION', 0.31);
 
 // refs
 // http://aws.amazon.com/fr/
 //
+// 0.3.1 : Reply_to and global WPMU setup
 // 0.3 : Last WP update
 // 0.2.2 : Reference language is now english
 // 0.2.1 : return-path | stats | Quota | Deactivate plugin | Production mode test
@@ -27,6 +28,12 @@ define('WPSES_VERSION', 0.29);
 // blacklist, mail delivery handling
 // dashboard integration (main stats without extra page)
 
+
+if (defined('WP_SES_ACCESS_KEY') and defined('WP_SES_SECRET_KEY')) {
+    define('WP_SES_RESTRICTED', true);
+} else {
+    define('WP_SES_RESTRICTED', false);
+}
 
 if (is_admin()) {
     // TODO : Ask before activate
@@ -63,7 +70,8 @@ function wpses_install() {
                 // TODO: garder liste des ids des demandes associ�es � chaque email.
                 // afficher : email, id demande , valid� ?
         ));
-        $wpses_options = get_option('wpses_options');
+        wpses_getoptions();
+        //$wpses_options = get_option('wpses_options');
     }
 }
 
@@ -101,10 +109,10 @@ function wpses_options() {
             }
         }
         // remove old senders
-        foreach ($senders as $email=>$info) {
+        foreach ($senders as $email => $info) {
             if ($info[1] and !in_array($email, $autorized)) {
                 $senders[$email][1] = false;
-               // echo 'remove '.$email.' ';
+                // echo 'remove '.$email.' ';
                 $updated = true;
             }
         }
@@ -156,10 +164,20 @@ function wpses_options() {
             $wpses_options['sender_ok'] = 0;
             $wpses_options['active'] = 0;
         }
-        $wpses_options['from_email'] = trim($_POST['from_email']);
-        $wpses_options['return_path'] = trim($_POST['return_path']);
+        if (!defined('WP_SES_FROM')) {
+            $wpses_options['from_email'] = trim($_POST['from_email']);
+        }
+        if (!defined('WP_SES_RETURNPATH')) {
+            $wpses_options['return_path'] = trim($_POST['return_path']);
+        }
         if ($wpses_options['return_path'] == '') {
             $wpses_options['return_path'] = $wpses_options['from_email'];
+        }
+        if (!defined('WP_SES_REPLYTO')) {
+            $wpses_options['reply_to'] = trim($_POST['reply_to']);
+            if ($wpses_options['reply_to'] == '') {
+                $wpses_options['reply_to'] = $wpses_options['from_email'];
+            }
         }
         $wpses_options['from_name'] = trim($_POST['from_name']); //
         // TODO si mail diff�re, relancer proc�dure check => resetter sender_ok si besoin
@@ -169,32 +187,36 @@ function wpses_options() {
             $wpses_options['sender_ok'] = 0;
             $wpses_options['active'] = 0;
         }
-        $wpses_options['access_key'] = trim($_POST['access_key']); //
-        $wpses_options['secret_key'] = trim($_POST['secret_key']); //
+        if (!WP_SES_RESTRICTED) {
+            $wpses_options['access_key'] = trim($_POST['access_key']); //
+            $wpses_options['secret_key'] = trim($_POST['secret_key']); //
+        }
         // TODO si credentials different, resetter credentials_ok
 
         update_option('wpses_options', $wpses_options);
         echo '<div id="message" class="updated fade"><p>' . __('Settings updated', 'wpses') . '</p></div>' . "\n";
     }
-    $wpses_options = get_option('wpses_options');
+    wpses_getoptions();
+    //$wpses_options = get_option('wpses_options');
     // validation cle amazon
-    // validation email envoi
-    if (!empty($_POST['addemail'])) {
-        wpses_verify_sender_step1($wpses_options['from_email']);
+    if (!WP_SES_RESTRICTED) { // server side check.
+        // validation email envoi
+        if (!empty($_POST['addemail'])) {
+            wpses_verify_sender_step1($wpses_options['from_email']);
+        }
+        // remove verified email
+        if (!empty($_POST['removeemail'])) {
+            wpses_remove_sender($_POST['email']);
+        }
+        // envoi mail test
+        if (!empty($_POST['testemail'])) {
+            wpses_test_email($wpses_options['from_email']);
+        }
+        // envoi mail test prod
+        if (!empty($_POST['prodemail'])) {
+            wpses_prod_email($_POST['prod_email_to'], $_POST['prod_email_subject'], $_POST['prod_email_content']);
+        }
     }
-    // remove verified email
-    if (!empty($_POST['removeemail'])) {
-        wpses_remove_sender($_POST['email']);
-    }
-    // envoi mail test
-    if (!empty($_POST['testemail'])) {
-        wpses_test_email($wpses_options['from_email']);
-    }
-    // envoi mail test prod
-    if (!empty($_POST['prodemail'])) {
-        wpses_prod_email($_POST['prod_email_to'], $_POST['prod_email_subject'], $_POST['prod_email_content']);
-    }
-
     include ('admin.tmpl.php');
 }
 
@@ -224,7 +246,9 @@ function wpses_admin_warnings() {
 function wpses_admin_menu() {
     add_options_page('wpses', __('WP SES', 'wpses'), 8, __FILE__, 'wpses_options');
     // Quota and Stats
-    add_submenu_page('index.php', 'SES Stats', 'SES Stats', 8, 'wp-ses/ses-stats.php');
+    if (!defined('WP_SES_HIDE_STATS') or (false == WP_SES_HIDE_STATS)) {
+        add_submenu_page('index.php', 'SES Stats', 'SES Stats', 8, 'wp-ses/ses-stats.php');
+    }
 }
 
 function wpses_from($mail_from_email) {
@@ -367,6 +391,18 @@ function wpses_mail($to, $subject, $message, $headers = '') {
     $m->addTo($to);
     $m->setFrom('"' . $wpses_options['from_name'] . '" <' . $wpses_options['from_email'] . ">");
     $m->setReturnPath($wpses_options['return_path']);
+    if ('' != $wpses_options['reply_to']) {
+        if ('headers' == strtolower($wpses_options['reply_to'])) {
+            // extract replyto from headers
+            $rto = array();
+            if (preg_match('/^Reply-To: ([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4})\b/i', $headers, $rto)) {
+                // does only support one email for now.
+                $m->addReplyTo($rto[1]);
+            }
+        } else {
+            $m->addReplyTo($wpses_options['reply_to']);
+        }
+    }
     $m->setSubject($subject);
     if ($html == '') { // que texte
         $m->setMessageFromString($txt);
@@ -381,8 +417,36 @@ function wpses_mail($to, $subject, $message, $headers = '') {
     }
 }
 
-if (!isset($wpses_options)) {
+function wpses_getoptions() {
+    global $wpses_options;
     $wpses_options = get_option('wpses_options');
+
+    if (defined('WP_SES_ACCESS_KEY')) {
+        $wpses_options['access_key'] = WP_SES_ACCESS_KEY;
+    }
+    if (defined('WP_SES_SECRET_KEY')) {
+        $wpses_options['secret_key'] = WP_SES_SECRET_KEY;
+    }
+    if (defined('WP_SES_RETURNPATH')) {
+        if ('' != WP_SES_RETURNPATH) {
+            $wpses_options['return_path'] = WP_SES_RETURNPATH;
+        }
+    }
+    if (defined('WP_SES_FROM')) {
+        if ('' != WP_SES_FROM) {
+            $wpses_options['from_email'] = WP_SES_FROM;
+        }
+    }
+    if (defined('WP_SES_REPLYTO')) {
+        if ('' != WP_SES_REPLYTO) {
+            $wpses_options['reply_to'] = WP_SES_REPLYTO;
+        }
+    }
+}
+
+global $wpses_options;
+if (!isset($wpses_options)) {
+    wpses_getoptions();
 }
 
 if ($wpses_options['active'] == 1) {
@@ -405,7 +469,7 @@ if ($wpses_options['active'] == 1) {
         }
 
         add_action('admin_notices', 'wpses_warningmail');
-        // D�sactiver "active" si actif.
+        // Desactiver "active" si actif.
         if ($wpses_options['active'] == 1) {
             $wpses_options['active'] = 0;
             update_option('wpses_options', $wpses_options);
