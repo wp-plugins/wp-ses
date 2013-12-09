@@ -3,7 +3,7 @@ Contributors: SylvainDeaure
 Donate link: http://wp-ses.com/donate.html
 Tags: email,ses,amazon,webservice,delivrability,newsletter,autoresponder,mail,wp_mail,smtp,service
 Requires at least: 3.0.0
-Tested up to: 3.5.2
+Tested up to: 3.7.1
 Stable tag: trunk
 
 WP-SES redirects all outgoing WordPress emails through Amazon Simple Email Service (SES) for maximum email delivrability.
