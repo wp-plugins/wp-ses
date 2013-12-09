@@ -121,6 +121,9 @@ define('WP_SES_AUTOACTIVATE',true);
 
 == Changelog ==
 
+= 0.3.42 =
+* Added Spanish translation, thanks to Andrew of webhostinghub.com
+
 = 0.3.4 =
 * Auto activation via WP_SES_AUTOACTIVATE define, see FAQ.
 
