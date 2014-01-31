@@ -2,14 +2,14 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.3.44
+  Version: 0.3.45
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.344);
+define('WPSES_VERSION', 0.345);
 
 // refs
 // http://aws.amazon.com/fr/
@@ -296,7 +296,7 @@ function wpses_check_SES() {
     global $wpses_options;
     global $SES;
     if (!isset($SES)) {
-        $SES = new SimpleEmailService($wpses_options['access_key'], $wpses_options['secret_key'],$wpses_options['endpoint']);
+        $SES = new SimpleEmailService($wpses_options['access_key'], $wpses_options['secret_key'], $wpses_options['endpoint']);
     }
 }
 
@@ -424,6 +424,9 @@ function wpses_mail($to, $subject, $message, $headers = '') {
 function wpses_getoptions() {
     global $wpses_options;
     $wpses_options = get_option('wpses_options');
+    if (!array_key_exists('reply_to', $wpses_options)) {
+        $wpses_options['reply_to'] = '';
+    }
     if (defined('WP_SES_ENDPOINT')) {
         $wpses_options['endpoint'] = WP_SES_ENDPOINT;
     }

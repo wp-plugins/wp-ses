@@ -122,6 +122,9 @@ define('WP_SES_AUTOACTIVATE',true);
 
 == Changelog ==
 
+= 0.3.45 =
+* Maintenance release - fixes some notices.
+
 = 0.3.44 =
 * Added Amazon SES Endpoint selection. EU users can now select EU region.
 
