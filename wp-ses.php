@@ -2,18 +2,19 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.3.45
+  Version: 0.3.46
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.345);
+define('WPSES_VERSION', 0.346);
 
 // refs
 // http://aws.amazon.com/fr/
 //
+// 0.3.46 : Remove notices, updated old code.
 // 0.3.42 : Spanish translation
 // 0.3.4 : auto activation via WP_SES_AUTOACTIVATE define
 // 0.3.1 : Reply_to and global WPMU setup
@@ -128,20 +129,25 @@ function wpses_options() {
         $wpses_options['active'] = 0;
         update_option('wpses_options', $wpses_options);
     }
-    if (($wpses_options['from_email'] != '') and ($senders[$wpses_options['from_email']][1] === TRUE)) {
-        // email exp enregistré non vide et listé, on peut donc supposer que credentials ok et exp ok.
-        if ($wpses_options['credentials_ok'] == 0) {
-            $wpses_options['credentials_ok'] = 1;
+    if (($wpses_options['from_email'] != '')) {
+        if (!isset($senders[$wpses_options['from_email']])) {
+            $senders[$wpses_options['from_email']] = array(-1, false);
+        }
+        if ($senders[$wpses_options['from_email']][1] === TRUE) { //
+            // email exp enregistré non vide et listé, on peut donc supposer que credentials ok et exp ok.
+            if ($wpses_options['credentials_ok'] == 0) {
+                $wpses_options['credentials_ok'] = 1;
+                update_option('wpses_options', $wpses_options);
+            }
+            if ($wpses_options['sender_ok'] == 0) {
+                $wpses_options['sender_ok'] = 1;
+                update_option('wpses_options', $wpses_options);
+            }
+        } else {
+            //if ($senders[$wpses_options['from_email']][1] !== TRUE) { //
+            $wpses_options['sender_ok'] = 0;
             update_option('wpses_options', $wpses_options);
         }
-        if ($wpses_options['sender_ok'] == 0) {
-            $wpses_options['sender_ok'] = 1;
-            update_option('wpses_options', $wpses_options);
-        }
-    }
-    if ($senders[$wpses_options['from_email']][1] !== TRUE) {
-        $wpses_options['sender_ok'] = 0;
-        update_option('wpses_options', $wpses_options);
     }
 
     if (!empty($_POST['activate'])) {
@@ -248,10 +254,10 @@ function wpses_admin_warnings() {
 }
 
 function wpses_admin_menu() {
-    add_options_page('wpses', __('WP SES', 'wpses'), 8, __FILE__, 'wpses_options');
+    add_options_page('wpses', __('WP SES', 'wpses'), 'manage_options', __FILE__, 'wpses_options');
     // Quota and Stats
     if (!defined('WP_SES_HIDE_STATS') or (false == WP_SES_HIDE_STATS)) {
-        add_submenu_page('index.php', 'SES Stats', 'SES Stats', 8, 'wp-ses/ses-stats.php');
+        add_submenu_page('index.php', 'SES Stats', 'SES Stats', 'manage_options', 'wp-ses/ses-stats.php');
     }
 }
 
