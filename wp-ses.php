@@ -2,18 +2,19 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.3.46
+  Version: 0.3.48
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.346);
+define('WPSES_VERSION', 0.348);
 
 // refs
 // http://aws.amazon.com/fr/
 //
+// 0.3.48 : Experimental WP Better Email compatibility
 // 0.3.46 : Remove notices, updated old code.
 // 0.3.42 : Spanish translation
 // 0.3.4 : auto activation via WP_SES_AUTOACTIVATE define
@@ -386,16 +387,30 @@ function wpses_prod_email($mail, $subject, $content) {
 function wpses_mail($to, $subject, $message, $headers = '') {
     global $SES;
     global $wpses_options;
+    global $wp_better_emails;
     extract(apply_filters('wp_mail', compact('to', 'subject', 'message', 'headers')));
     wpses_check_SES();
-    $message = preg_replace('/<(http:.*)>/', '$1', $message);
-    $html = $message;
-    $txt = strip_tags($html);
-    if (strlen($html) == strlen($txt)) {
-        $html = ''; // que msg text
+    if (isset($wp_better_emails)) {
+        // From wpbe plugin, not efficient nor elegant - Will do better next time.
+        // Could just call the php filter on a adhoc object, to be less dependant on the implementation of wpbe code.
+        $txt = wp_specialchars_decode($message, ENT_QUOTES);
+        $txt = $wp_better_emails->set_email_template($txt, 'plaintext_template');
+        $txt = apply_filters('wpbe_plaintext_body', $wp_better_emails->template_vars_replacement($txt));
+        /** HTML ******************************************************* */
+        $html = $wp_better_emails->esc_textlinks($message);
+        $html = nl2br(make_clickable($html));
+        $html = $wp_better_emails->set_email_template($html);
+        $html = apply_filters('wpbe_html_body', $wp_better_emails->template_vars_replacement($html));
+    } else {
+        $message = preg_replace('/<(http:.*)>/', '$1', $message);
+        $html = $message;
+        $txt = strip_tags($html);
+        if (strlen($html) == strlen($txt)) {
+            $html = ''; // que msg text
+        }
+        // no html entity in txt.
+        $txt = html_entity_decode($txt, ENT_NOQUOTES, 'UTF-8');
     }
-    // no html entity in txt.
-    $txt = html_entity_decode($txt, ENT_NOQUOTES, 'UTF-8');
     // TODO: option pour que TXT si msg html, ou les deux comme ici par défaut.
     $m = new SimpleEmailServiceMessage();
     $m->addTo($to);
