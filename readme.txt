@@ -27,7 +27,8 @@ Current features are:
 *	Ability to customize return path for delivery failure notifications
 *       Custom Reply-To or from Headers
 *       Default config values for centralised WPMU setups
-*       SES Endpoint selection       
+*       SES Endpoint selection     
+*       Mails with attachments (Compatible with Contact Form 7)  
 
 See full features at http://wp-ses.com/features.html
 
@@ -130,6 +131,11 @@ define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');
 1. the settings screen of WP-SES plugin.
 
 == Changelog ==
+
+= 0.3.52 =
+* Warning if Curl not installed
+* Attachments support for use with Contact Form (finally !)
+* Notice fixed
 
 = 0.3.50 =
 * Notice fixed, setup documentation slightly tweaked

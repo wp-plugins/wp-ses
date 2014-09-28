@@ -9,7 +9,7 @@
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.350);
+define('WPSES_VERSION', 0.352);
 
 // refs
 // http://aws.amazon.com/fr/
@@ -32,6 +32,8 @@ define('WPSES_VERSION', 0.350);
 // blacklist, mail delivery handling
 // dashboard integration (main stats without extra page)
 
+// Add error display for test messages
+// add attachments (contact form 7) : see https://github.com/daniel-zahariev/php-aws-ses
 
 if (defined('WP_SES_ACCESS_KEY') and defined('WP_SES_SECRET_KEY')) {
     define('WP_SES_RESTRICTED', true);
@@ -47,7 +49,7 @@ if (is_admin()) {
     register_activation_hook(__FILE__, 'wpses_install');
     register_deactivation_hook(__FILE__, 'wpses_uninstall');
 }
-require_once (WP_PLUGIN_DIR . '/wp-ses/ses.class.php');
+require_once (WP_PLUGIN_DIR . '/wp-ses/ses.class.0.8.4.php');
 
 function wpses_init() {
     load_plugin_textdomain('wpses', false, basename(dirname(__FILE__)));
@@ -240,6 +242,14 @@ function wpses_uninstall() {
 
 function wpses_admin_warnings() {
     global $wpses_options;
+    if (!function_exists('curl_version')) {
+        function wpses_curl_warning() {
+            global $wpses_options;
+            echo "<div id='wpses-curl-warning' class='updated fade'><p><strong>" . __("WP SES - CURL extension not available. SES Won't work without Curl. Ask your host.", 'wpses') ."</strong></p></div>";
+        }
+        add_action('admin_notices', 'wpses_curl_warning');
+        return;
+    }        
     $active = $wpses_options['active'];
     if ($active <= 0) {
 
@@ -384,10 +394,14 @@ function wpses_prod_email($mail, $subject, $content) {
 }
 
 // returns msg id
-function wpses_mail($to, $subject, $message, $headers = '') {
+function wpses_mail($to, $subject, $message, $headers = '',$attachments='') {
     global $SES;
     global $wpses_options;
     global $wp_better_emails;
+    // headers can be sent as array, too. convert them to string to avoid further complications.
+    if (is_array($headers)) {
+        $headers= implode("\r\n",$headers);
+    }
     extract(apply_filters('wp_mail', compact('to', 'subject', 'message', 'headers')));
     wpses_check_SES();
     if (isset($wp_better_emails)) {
@@ -414,8 +428,8 @@ function wpses_mail($to, $subject, $message, $headers = '') {
     // TODO: option pour que TXT si msg html, ou les deux comme ici par défaut.
     $m = new SimpleEmailServiceMessage();
     $m->addTo($to);
-    $m->setFrom('"' . $wpses_options['from_name'] . '" <' . $wpses_options['from_email'] . ">");
     $m->setReturnPath($wpses_options['return_path']);
+    $from = '"' . $wpses_options['from_name'] . '" <' . $wpses_options['from_email'] . ">";
     if ('' != $wpses_options['reply_to']) {
         if ('headers' == strtolower($wpses_options['reply_to'])) {
             // extract replyto from headers
@@ -424,15 +438,31 @@ function wpses_mail($to, $subject, $message, $headers = '') {
                 // does only support one email for now.
                 $m->addReplyTo($rto[1]);
             }
+            if (preg_match('/^From: (.*)/isU', $headers, $rto)) {
+                // Uses "From:" header
+                $from=$rto[1];
+            }
+            
         } else {
             $m->addReplyTo($wpses_options['reply_to']);
         }
     }
+    $m->setFrom($from);
     $m->setSubject($subject);
     if ($html == '') { // que texte
         $m->setMessageFromString($txt);
     } else {
         $m->setMessageFromString($txt, $html);
+    }
+      // Attachments
+    if ('' != $attachments) {
+        if (!is_array($attachments)) {
+            $attachments=explode("\n",$attachments);
+        }
+        // Now we got an array
+        foreach($attachments as $afile) {
+            $m->addAttachmentFromFile(basename($afile),$afile);
+        }
     }
     $res = $SES->sendEmail($m);
     if (is_array($res)) {
@@ -445,6 +475,9 @@ function wpses_mail($to, $subject, $message, $headers = '') {
 function wpses_getoptions() {
     global $wpses_options;
     $wpses_options = get_option('wpses_options');
+    if (!is_array($wpses_options)) {
+        $wpses_options=array();
+    }
     if (!array_key_exists('reply_to', $wpses_options)) {
         $wpses_options['reply_to'] = '';
     }
@@ -493,9 +526,9 @@ if (!isset($wpses_options)) {
 if ($wpses_options['active'] == 1) {
     if (!function_exists('wp_mail')) {
 
-        function wp_mail($to, $subject, $message, $headers = '') {
+        function wp_mail($to, $subject, $message, $headers = '',$attachments='') {
             global $wpses_options;
-            $id = wpses_mail($to, $subject, $message, $headers);
+            $id = wpses_mail($to, $subject, $message, $headers,$attachments);
             if ($id != '') {
                 return true;
             } else {
