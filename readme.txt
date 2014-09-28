@@ -87,35 +87,43 @@ Then, when all works as expected, fill in the config file.
 
 Edit the wp-config.php file, and add what you want to define. Here is a complete setup, some defines are optionnal.
 
-// WP-SES defines
+// WP-SES defines  
 
-// Amazon Access Key
+// Amazon Access Key  
 define('WP_SES_ACCESS_KEY','blablablakey');
 
-// Amazon Secret Key
+// Amazon Secret Key  
 define('WP_SES_SECRET_KEY','blablablasecret');
 
-// From mail (optionnal) must be an amazon SES validated email
-// hard coded email, leave empty or comment out to allow custom setting via panel
+// From mail (optionnal) must be an amazon SES validated email  
+// hard coded email, leave empty or comment out to allow custom setting via panel  
 define('WP_SES_FROM','me@....');
 
-// Return path for bounced emails (optionnal)
-// hard coded email, leave empty or comment out to allow custom setting via panel
+// Return path for bounced emails (optionnal)  
+// hard coded email, leave empty or comment out to allow custom setting via panel  
 define('WP_SES_RETURNPATH','return@....');
 
-// ReplyTo (optionnal) - This will get the replies from the recipients.
-// hard coded email, or 'headers' for using the 'replyto' from the headers. 
-// Leave empty or comment out to allow custom setting via panel
+// ReplyTo (optionnal) - This will get the replies from the recipients.  
+// hard coded email, or 'headers' for using the 'replyto' from the headers.   
+// Leave empty or comment out to allow custom setting via panel  
 define('WP_SES_REPLYTO','headers');
 
-// Hide list of verified emails (optionnal)
+// Hide list of verified emails (optionnal)  
 define('WP_SES_HIDE_VERIFIED',true);
 
-// Hide SES Stats panel (optionnal)
+// Hide SES Stats panel (optionnal)  
 define('WP_SES_HIDE_STATS',true);
 
-// Auto activate the plugin for all sites (optionnal)
+// Auto activate the plugin for all sites (optionnal)  
 define('WP_SES_AUTOACTIVATE',true);
+
+When using defines to hardcode your setting, don't forget to define the SES endpoints, too :
+
+define('WP_SES_ENDPOINT', 'email.us-east-1.amazonaws.com');  
+OR  
+define('WP_SES_ENDPOINT', 'email.us-west-2.amazonaws.com');  
+OR  
+define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');  
 
 == Screenshots ==
 
@@ -161,7 +169,7 @@ define('WP_SES_AUTOACTIVATE',true);
 * Various bugfixes
 
 = 0.2.2 =
-Reference Language is now English.
+Reference Language is now English.  
 WP SES est fourni avec les textes en Francais.
 
 = 0.2.1 =
