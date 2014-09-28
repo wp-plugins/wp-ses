@@ -95,26 +95,26 @@ define('WP_SES_ACCESS_KEY','blablablakey');
 // Amazon Secret Key  
 define('WP_SES_SECRET_KEY','blablablasecret');
 
-// From mail (optionnal) must be an amazon SES validated email  
+// From mail (optional) must be an amazon SES validated email  
 // hard coded email, leave empty or comment out to allow custom setting via panel  
 define('WP_SES_FROM','me@....');
 
-// Return path for bounced emails (optionnal)  
+// Return path for bounced emails (optional)  
 // hard coded email, leave empty or comment out to allow custom setting via panel  
 define('WP_SES_RETURNPATH','return@....');
 
-// ReplyTo (optionnal) - This will get the replies from the recipients.  
+// ReplyTo (optional) - This will get the replies from the recipients.  
 // hard coded email, or 'headers' for using the 'replyto' from the headers.   
 // Leave empty or comment out to allow custom setting via panel  
 define('WP_SES_REPLYTO','headers');
 
-// Hide list of verified emails (optionnal)  
+// Hide list of verified emails (optional)  
 define('WP_SES_HIDE_VERIFIED',true);
 
-// Hide SES Stats panel (optionnal)  
+// Hide SES Stats panel (optional)  
 define('WP_SES_HIDE_STATS',true);
 
-// Auto activate the plugin for all sites (optionnal)  
+// Auto activate the plugin for all sites (optional)  
 define('WP_SES_AUTOACTIVATE',true);
 
 When using defines to hardcode your setting, don't forget to define the SES endpoints, too :
