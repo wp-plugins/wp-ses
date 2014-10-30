@@ -2,14 +2,14 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.3.52
+  Version: 0.3.54
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.352);
+define('WPSES_VERSION', 0.354);
 
 // refs
 // http://aws.amazon.com/fr/
@@ -72,6 +72,7 @@ function wpses_install() {
             'credentials_ok' => 0,
             'sender_ok' => 0,
             'last_ses_check' => 0, // timestamp of last quota check
+            'force' =>0,
             'active' => 0, // reset to 0 if not pluggable or config change.
             'version' => '0' // Version of the db
                 // TODO: garder liste des ids des demandes associ�es � chaque email.
@@ -128,7 +129,7 @@ function wpses_options() {
     if ($updated) {
         update_option('wpses_senders', $senders);
     }
-    if (($wpses_options['sender_ok'] != 1) or ($wpses_options['credentials_ok'] != 1)) {
+    if ((($wpses_options['sender_ok'] != 1) and  $wpses_options['force'] != 1) or ($wpses_options['credentials_ok'] != 1)) {
         $wpses_options['active'] = 0;
         update_option('wpses_options', $wpses_options);
     }
@@ -154,6 +155,12 @@ function wpses_options() {
     }
 
     if (!empty($_POST['activate'])) {
+        $wpses_options['force'] = 0;
+        if (1 == $_POST['force']) {
+            // bad hack to force plugin activation with IAM credentials
+            $wpses_options['sender_ok'] == 1;
+            $wpses_options['force'] = 1;
+        }
         if (($wpses_options['sender_ok'] == 1) and ($wpses_options['credentials_ok'] == 1)) {
             $wpses_options['active'] = 1;
             update_option('wpses_options', $wpses_options);
@@ -480,6 +487,9 @@ function wpses_getoptions() {
     }
     if (!array_key_exists('reply_to', $wpses_options)) {
         $wpses_options['reply_to'] = '';
+    }
+    if (!array_key_exists('force', $wpses_options)) {
+        $wpses_options['force'] = '0';
     }
     if (defined('WP_SES_ENDPOINT')) {
         $wpses_options['endpoint'] = WP_SES_ENDPOINT;

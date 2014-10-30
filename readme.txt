@@ -132,6 +132,10 @@ define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');
 
 == Changelog ==
 
+= 0.3.54 =
+* bad ses lib include fixed
+* Added "force plugin activation" for some use case with IAM credentials
+
 = 0.3.52 =
 * Warning if Curl not installed
 * Attachments support for use with Contact Form (finally !)
