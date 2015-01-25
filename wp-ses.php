@@ -9,7 +9,7 @@
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.356);
+define('WPSES_VERSION', 0.358);
 
 // refs
 // http://aws.amazon.com/fr/
@@ -72,7 +72,7 @@ function wpses_install() {
             'sender_ok' => 0,
             'last_ses_check' => 0, // timestamp of last quota check
             'force' => 0,
-            'active' => 0, // reset to 0 if not pluggable or config change.
+            'active' => 1, // reset to 0 if not pluggable or config change.
             'version' => '0' // Version of the db
                 // TODO: garder liste des ids des demandes associ�es � chaque email.
                 // afficher : email, id demande , valid� ?
@@ -410,6 +410,9 @@ function wpses_mail($to, $subject, $message, $headers = '', $attachments = '') {
     if (is_array($headers)) {
         $headers = implode("\r\n", $headers);
     }
+    if (is_array($to)) {
+        $to = implode(",", $to);
+    }    
     extract(apply_filters('wp_mail', compact('to', 'subject', 'message', 'headers')));
     wpses_check_SES();
     if (isset($wp_better_emails)) {
@@ -544,6 +547,8 @@ global $wpses_options;
 if (!isset($wpses_options)) {
     wpses_getoptions();
 }
+// Test : always auto-activate
+$wpses_options['active'] = 1;
 
 if ($wpses_options['active'] == 1) {
     if (!function_exists('wp_mail')) {

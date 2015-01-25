@@ -133,6 +133,10 @@ define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');
 
 == Changelog ==
 
+= 0.3.58 =
+* Tries to always auto-activate in answer to https://wordpress.org/support/topic/the-plugin-get-inactive-after-a-few-minutes
+* small fixes
+
 = 0.3.56 =
 * fixed sender name format
 * fixed regexp for some header recognition
