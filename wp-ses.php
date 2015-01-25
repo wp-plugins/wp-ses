@@ -2,7 +2,7 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.3.56
+  Version: 0.3.58
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
