@@ -2,14 +2,14 @@
 
 /*
   Plugin Name: WP SES
-  Version: 0.3.59
+  Version: 0.3.60
   Plugin URI: http://wp-ses.com
   Description: Uses Amazon Simple Email Service instead of local mail for all outgoing WP emails.
   Author: Sylvain Deaure
   Author URI: http://www.blog-expert.fr
  */
 
-define('WPSES_VERSION', 0.359);
+define('WPSES_VERSION', 0.360);
 
 // refs
 // http://aws.amazon.com/fr/
@@ -653,6 +653,7 @@ if ($wpses_options['active'] == 1) {
 
     } else {
         wpses_log("ERROR\twp_mail override by another plugin !!");
+
         function wpses_warningmail() {
             echo "<div id='wpses-warning' class='updated fade'><p><strong>" . __('Another plugin did override wp-mail function. Please de-activate the other plugin if you want WP SES to work properly.', 'wpses') . "</strong></p></div>";
         }
@@ -661,6 +662,13 @@ if ($wpses_options['active'] == 1) {
         // Desactiver "active" si actif.
         if ($wpses_options['active'] == 1) {
             wpses_log("Then deactivating plugin");
+            try {
+                $func = new ReflectionFunction('wp_mail');
+                wpses_log('wp_mail already defined in ' . $func->getFileName());
+            } catch (Exception $e) {
+                
+            }
+
             $wpses_options['active'] = 0;
             update_option('wpses_options', $wpses_options);
         }
