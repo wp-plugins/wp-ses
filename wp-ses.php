@@ -163,7 +163,7 @@ function wpses_options() {
         $wpses_options['force'] = 0;
         if (1 == $_POST['force']) {
             // bad hack to force plugin activation with IAM credentials
-            $wpses_options['sender_ok'] == 1;
+            $wpses_options['sender_ok'] = 1;
             $wpses_options['force'] = 1;
             wpses_log('Forced activation');
         }
