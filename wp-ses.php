@@ -644,6 +644,9 @@ function wpses_getoptions() {
             $wpses_options['reply_to'] = WP_SES_REPLYTO;
         }
     }
+    if (!isset($wpses_options['active'])) {
+        $wpses_options['active'] = 0;
+    }
     if (defined('WP_SES_AUTOACTIVATE')) {
         if (WP_SES_AUTOACTIVATE) {
             $wpses_options['active'] = 1;
