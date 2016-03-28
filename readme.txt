@@ -1,45 +1,45 @@
 === Plugin Name ===
 Contributors: SylvainDeaure
 Donate link: http://wp-ses.com/donate.html
-Tags: email,ses,amazon,webservice,delivrability,newsletter,autoresponder,mail,wp_mail,smtp,service
+Tags: email,ses,amazon,webservice,deliverability,newsletter,autoresponder,mail,wp_mail,smtp,service
 Requires at least: 3.0.0
 Tested up to: 4.1
 Stable tag: trunk
 
-WP-SES redirects all outgoing WordPress emails through Amazon Simple Email Service (SES) for maximum email delivrability.
+WP-SES redirects all outgoing WordPress emails through Amazon Simple Email Service (SES) for maximum email deliverability.
 
 == Description ==
 
 WP-SES redirects All outgoing WordPress emails through Amazon Simple Email Service (SES) instead of local wp_mail function.
-This ensures high email delivrability, email trafic statistics and a powerful managed infrastructure.
+This ensures high email deliverability, email traffic statistics and a powerful managed infrastructure.
 
-This plugin is functionnal and I use it on several websites.
+This plugin is functional and I use it on several websites.
 WPMU features are so far experimental.
 
 Current features are:
 
-*	Ability to adjust WordPress Default Sender Email and Name
-*	Validation of Amazon API Credentials
-*	Request confirmation for sender Emails
-*	Test message within Amazon Sandbox mode
-*	Full integration as seamless replacement for wp_mail internal function
-*	Dasboard panel with Quota and statistics
-*	Ability to customize return path for delivery failure notifications
+*   Ability to adjust WordPress Default Sender Email and Name
+*   Validation of Amazon API Credentials
+*   Request confirmation for sender Emails
+*   Test message within Amazon Sandbox mode
+*   Full integration as seamless replacement for wp_mail internal function
+*   Dashboard panel with Quota and statistics
+*   Ability to customize return path for delivery failure notifications
 *       Custom Reply-To or from Headers
-*       Default config values for centralised WPMU setups
-*       SES Endpoint selection     
-*       Mails with attachments (Compatible with Contact Form 7)  
-*       File logging feature (may be verbose and unsecure, do not use as is in production for a long period of time)
+*       Default config values for centralized WPMU setups
+*       SES Endpoint selection
+*       Mails with attachments (Compatible with Contact Form 7)
+*       File logging feature (may be verbose and insecure, do not use as is in production for a long period of time)
 
 See full features at http://wp-ses.com/features.html
 
 Roadmap
 
-*	Graphical SES Statistics
-*	Full featured Error management
-*	Control of sending rate
-*	Notice for volume limits
-*	Bounce and blacklist management
+*   Graphical SES Statistics
+*   Full featured Error management
+*   Control of sending rate
+*   Notice for volume limits
+*   Bounce and blacklist management
 
 
 You can read more about Amazon SES here : http://aws.amazon.com/ses/
@@ -72,10 +72,10 @@ Please use our main website http://wp-ses.com/faq.html for all support related q
 
 = What are the pre-requisites ? =
 
-*	A WP3+ Self hosted WordPress Blog
-*	PHP5 and Curl PHP extension
-*	An Amazon Web Service account
-*	Validate your SES service
+*   A WP3+ Self hosted WordPress Blog
+*   PHP5 and Curl PHP extension
+*   An Amazon Web Service account
+*   Validate your SES service
 
 = Can you help me about... (an Amazon concern) =
 
@@ -87,45 +87,45 @@ Please direct your specific Amazon questions to the Amazon support.
 Please, DO test your setting without this.
 Then, when all works as expected, fill in the config file.
 
-Edit the wp-config.php file, and add what you want to define. Here is a complete setup, some defines are optionnal.
+Edit the wp-config.php file, and add what you want to define. Here is a complete setup, some defines are optional.
 
-// WP-SES defines  
+// WP-SES defines
 
-// Amazon Access Key  
+// Amazon Access Key
 define('WP_SES_ACCESS_KEY','blablablakey');
 
-// Amazon Secret Key  
+// Amazon Secret Key
 define('WP_SES_SECRET_KEY','blablablasecret');
 
-// From mail (optional) must be an amazon SES validated email  
-// hard coded email, leave empty or comment out to allow custom setting via panel  
+// From mail (optional) must be an amazon SES validated email
+// hard coded email, leave empty or comment out to allow custom setting via panel
 define('WP_SES_FROM','me@....');
 
-// Return path for bounced emails (optional)  
-// hard coded email, leave empty or comment out to allow custom setting via panel  
+// Return path for bounced emails (optional)
+// hard coded email, leave empty or comment out to allow custom setting via panel
 define('WP_SES_RETURNPATH','return@....');
 
-// ReplyTo (optional) - This will get the replies from the recipients.  
-// hard coded email, or 'headers' for using the 'replyto' from the headers.   
-// Leave empty or comment out to allow custom setting via panel  
+// ReplyTo (optional) - This will get the replies from the recipients.
+// hard coded email, or 'headers' for using the 'replyto' from the headers.
+// Leave empty or comment out to allow custom setting via panel
 define('WP_SES_REPLYTO','headers');
 
-// Hide list of verified emails (optional)  
+// Hide list of verified emails (optional)
 define('WP_SES_HIDE_VERIFIED',true);
 
-// Hide SES Stats panel (optional)  
+// Hide SES Stats panel (optional)
 define('WP_SES_HIDE_STATS',true);
 
-// Auto activate the plugin for all sites (optional)  
+// Auto activate the plugin for all sites (optional)
 define('WP_SES_AUTOACTIVATE',true);
 
 When using defines to hardcode your setting, don't forget to define the SES endpoints, too :
 
-define('WP_SES_ENDPOINT', 'email.us-east-1.amazonaws.com');  
-OR  
-define('WP_SES_ENDPOINT', 'email.us-west-2.amazonaws.com');  
-OR  
-define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');  
+define('WP_SES_ENDPOINT', 'email.us-east-1.amazonaws.com');
+OR
+define('WP_SES_ENDPOINT', 'email.us-west-2.amazonaws.com');
+OR
+define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');
 
 == Screenshots ==
 
@@ -189,7 +189,7 @@ define('WP_SES_ENDPOINT', 'email.eu-west-1.amazonaws.com');
 * Various bugfixes
 
 = 0.2.2 =
-Reference Language is now English.  
+Reference Language is now English.
 WP SES est fourni avec les textes en Francais.
 
 = 0.2.1 =
