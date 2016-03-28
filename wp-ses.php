@@ -91,18 +91,18 @@ function wpses_options() {
     if (!in_array('administrator', $current_user->roles)) {
         //die('Pas admin');
     }
-    $autorized = '';
+    $authorized = '';
     if (($wpses_options['access_key'] != '') and ($wpses_options['secret_key'] != '')) {
-        $autorized = wpses_getverified();
+        $authorized = wpses_getverified();
     }
     $senders = (array) get_option('wpses_senders');
     // ajouter dans senders les verified absents
     $updated = false;
-    if ('' != $autorized) {
-        if (!is_array($autorized)) {
-            $authorized = array($autorized);
+    if ('' != $authorized) {
+        if (!is_array($authorized)) {
+            $authorized = array($authorized);
         }
-        foreach ($autorized as $email) {
+        foreach ($authorized as $email) {
             if (!array_key_exists($email, $senders)) {
                 $senders[$email] = array(
                     -1,
@@ -119,7 +119,7 @@ function wpses_options() {
         }
         // remove old senders
         foreach ($senders as $email => $info) {
-            if ($info[1] and !in_array($email, $autorized)) {
+            if ($info[1] and !in_array($email, $authorized)) {
                 $senders[$email][1] = false;
                 // echo 'remove '.$email.' ';
                 $updated = true;
@@ -163,7 +163,7 @@ function wpses_options() {
         $wpses_options['force'] = 0;
         if (1 == $_POST['force']) {
             // bad hack to force plugin activation with IAM credentials
-            $wpses_options['sender_ok'] == 1;
+            $wpses_options['sender_ok'] = 1;
             $wpses_options['force'] = 1;
             wpses_log('Forced activation');
         }
@@ -172,8 +172,8 @@ function wpses_options() {
             wpses_log('Normal activation');
             update_option('wpses_options', $wpses_options);
             echo '<div id="message" class="updated fade">
-							<p>' . __('Plugin is activated and functionnal', 'wpses') . '</p>
-							</div>' . "\n";
+                            <p>' . __('Plugin is activated and functional', 'wpses') . '</p>
+                            </div>' . "\n";
         }
     }
     if (!empty($_POST['deactivate'])) {
@@ -181,8 +181,8 @@ function wpses_options() {
         wpses_log('Manual deactivation');
         update_option('wpses_options', $wpses_options);
         echo '<div id="message" class="updated fade">
-							<p>' . __('Plugin de-activated', 'wpses') . '</p>
-							</div>' . "\n";
+                            <p>' . __('Plugin de-activated', 'wpses') . '</p>
+                            </div>' . "\n";
     }
     if (!empty($_POST['activatelogs'])) {
 
@@ -190,13 +190,13 @@ function wpses_options() {
         @ touch(WP_PLUGIN_DIR . '/wp-ses/log/wpses.log');
         if (!file_exists(WP_PLUGIN_DIR . '/wp-ses/log/wpses.log')) {
             echo '<div id="message" class="updated">
-	    <p>' . __('Unable to create dir ', 'wpses') . WP_PLUGIN_DIR . '/wp-ses/log/' . __(' Please create it and give WP proper rights ', 'wpses') . '</p>
+        <p>' . __('Unable to create dir ', 'wpses') . WP_PLUGIN_DIR . '/wp-ses/log/' . __(' Please create it and give WP proper rights ', 'wpses') . '</p>
             </div>' . "\n";
         } else {
             @ unlink(WP_PLUGIN_DIR . '/wp-ses/log/wpses.log');
             echo '<div id="message" class="updated fade">
-							<p>' . __('Logs activated', 'wpses') . '</p>
-							</div>' . "\n";
+                            <p>' . __('Logs activated', 'wpses') . '</p>
+                            </div>' . "\n";
             $wpses_options['log'] = 1;
             update_option('wpses_options', $wpses_options);
             wpses_log('Start Logging');
@@ -207,8 +207,8 @@ function wpses_options() {
         update_option('wpses_options', $wpses_options);
         @ unlink(WP_PLUGIN_DIR . '/wp-ses/log/wpses.log');
         echo '<div id="message" class="updated fade">
-	<p>' . __('Logs deactivated and cleared', 'wpses') . '</p>
-	</div>' . "\n";
+    <p>' . __('Logs deactivated and cleared', 'wpses') . '</p>
+    </div>' . "\n";
     }
     if (!empty($_POST['viewlogs'])) {
         if (file_exists(WP_PLUGIN_DIR . '/wp-ses/log/wpses.log')) {
@@ -216,8 +216,8 @@ function wpses_options() {
             die();
         } else {
             echo '<div id="message" class="updated fade">
-	<p>' . __('No log file', 'wpses') . '</p>
-	</div>' . "\n";
+    <p>' . __('No log file', 'wpses') . '</p>
+    </div>' . "\n";
         }
     }
     if (!empty($_POST['save'])) {
@@ -427,7 +427,7 @@ function wpses_verify_sender_step1($mail) {
     restore_error_handler();
     $WPSESMSG .= ' id ' . var_export($rid, true);
     wpses_message_step1done();
-    //	add_action('admin_notices', 'wpses_message_step1done'); // no : too late for this !
+    //  add_action('admin_notices', 'wpses_message_step1done'); // no : too late for this !
 }
 
 function wpses_remove_sender($mail) {
@@ -666,7 +666,7 @@ if ($wpses_options['active'] == 1) {
                 $func = new ReflectionFunction('wp_mail');
                 wpses_log('wp_mail already defined in ' . $func->getFileName());
             } catch (Exception $e) {
-                
+
             }
 
             $wpses_options['active'] = 0;

@@ -6,10 +6,10 @@
 
 
         <h3><?php _e('Plugin State', 'wpses') ?>&nbsp;<input type="submit" name="refresh" value="<?php _e('Refresh', 'wpses') ?>" /></h3>
-    </form>  
+    </form>
     <div style="border:1px solid#ccc; padding:10px; float:right; ">
         Don't forget to check online FAQs on <a href="http://wp-ses.com/" target="_blank">WP-SES</a> website.<br />
-        We also provide usefull tips on email delivrability<br />and successfull list building.
+        We also provide useful tips on email deliverability<br />and successful list building.
     </div>
     <ul>
         <?php
@@ -38,7 +38,7 @@
             echo('<li style="color:#f00;">');
             _e("Sender Email has not been confirmed yet.", 'wpses');
         }
-        ?></li>  	
+        ?></li>
 
         <?php
         if ($wpses_options['active'] == 1) {
@@ -67,13 +67,13 @@
                 <p class="submit">
                     <input type="submit" name="activate" value="<?php _e('Activate plugin', 'wpses') ?>" />
                 </p><?php _e('Warning: Activate only if your account is in production mode.<br />One activated, all outgoing emails will go through Amazon SES and will NOT be sent to any email while in sandbox.', 'wpses') ?>
-            </form>  		
+            </form>
         <?php } ?></li>
 
 
     </ul>
     <h3><?php _e('Sender Email', 'wpses') ?></h3>
-    <?php _e('These settings do replace default sender email used by your blog.', 'wpses') ?>
+    <?php _e('These settings replace the default sender email used by your blog.', 'wpses') ?>
     <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <?php wp_nonce_field('wpses'); ?>
         <table class="form-table">
@@ -117,7 +117,7 @@
         <h3><?php _e("Amazon API Keys", 'wpses') ?></h3>
         <?php if (!WP_SES_RESTRICTED) { ?>
             <div style="border:1px solid#ccc; padding:10px; float:right; ">
-                If you already use an Amazon Webservice like S3,<br />
+                If you already use an Amazon web service like S3,<br />
                 you can use the very same keys here.
             </div>
             <?php _e('Please insert here your API keys given by the Amazon Web Services.', 'wpses') ?>
@@ -166,7 +166,7 @@
     <?php _e('The following senders are known:', 'wpses') ?>
         <br />
                 <?php
-                //print_r($autorized); 
+                //print_r($autorized);
                 //$senders
                 ?>
         <div style="width:70%">
@@ -198,7 +198,7 @@
                         <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
                         <?php wp_nonce_field('wpses'); ?><input type="hidden" name="email" value="<?php echo $email ?>">
                             <!-- div class="submit" -->
-                            <input type="submit" name="removeemail" value="<?php _e('Remove', 'wpses') ?>" onclick="return confirm('<?php _e('Effacer cette adresse des expéditeurs confirmés ?', 'wpses') ?>')"/>
+                            <input type="submit" name="removeemail" value="<?php _e('Remove', 'wpses') ?>" onclick="return confirm('<?php _e('Are you sure you want to delete this address?', 'wpses') ?>')"/>
                             <!-- /div -->
                         </form>
                         <?php
@@ -237,7 +237,7 @@
         </form>
         <br />&nbsp;
         <h3><?php _e('Production mode test', 'wpses') ?></h3>
-    <?php _e('Once Amazon did activate your account into production mode, you can begin to send mail to any address<br />Use the form below to test this before fully activating the plugin on your blog.', 'wpses') ?>
+    <?php _e('Once Amazon puts your account into production mode, you can begin to send mail to any address<br />Use the form below to test this before fully activating the plugin on your blog.', 'wpses') ?>
         <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
     <?php wp_nonce_field('wpses'); ?>
             <table class="form-table" >
@@ -268,11 +268,11 @@
         <?php _e('Logging is inactive', 'wpses') ?><br />
             <input type="submit" name="activatelogs" value="<?php _e('Activate logs', 'wpses') ?>" />
         <?php } ?>
-    </form> 
+    </form>
     <div style="width:80%">
 <?php
 if (function_exists('sd_rss_widget')) {
-    //	sd_rss_widget(array('num'=>3));
+    //  sd_rss_widget(array('num'=>3));
 }
 ?>
     </div>
