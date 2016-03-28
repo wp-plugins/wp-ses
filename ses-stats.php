@@ -29,7 +29,7 @@ if ($quota['Max24HourSend'] > 0) {
 }
 
 $stats = $SES->getSendStatistics();
-usort($stats[SendDataPoints], 'wpses_stsort');
+usort($stats['SendDataPoints'], 'wpses_stsort');
 
 
 include ('stats.tmpl.php');
