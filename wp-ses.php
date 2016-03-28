@@ -161,9 +161,9 @@ function wpses_options() {
 
     if (!empty($_POST['activate'])) {
         $wpses_options['force'] = 0;
-        if (1 == $_POST['force']) {
+        if (isset($_POST['force']) and 1 == $_POST['force']) {
             // bad hack to force plugin activation with IAM credentials
-            $wpses_options['sender_ok'] == 1;
+            $wpses_options['sender_ok'] = 1;
             $wpses_options['force'] = 1;
             wpses_log('Forced activation');
         }
@@ -594,6 +594,24 @@ function wpses_getoptions() {
     if (!array_key_exists('log', $wpses_options)) {
         $wpses_options['log'] = '0';
     }
+    if (!array_key_exists('access_key', $wpses_options)) {
+        $wpses_options['access_key'] = '';
+    }
+    if (!array_key_exists('secret_key', $wpses_options)) {
+        $wpses_options['secret_key'] = '';
+    }
+    if (!array_key_exists('from_email', $wpses_options)) {
+        $wpses_options['from_email'] = '';
+    }
+    if (!array_key_exists('from_name', $wpses_options)) {
+        $wpses_options['from_name'] = '';
+    }
+    if (!array_key_exists('sender_ok', $wpses_options)) {
+        $wpses_options['sender_ok'] = 1;
+    }
+    if (!array_key_exists('credentials_ok', $wpses_options)) {
+        $wpses_options['credentials_ok'] = 1;
+    }
     if (defined('WP_SES_ENDPOINT')) {
         $wpses_options['endpoint'] = WP_SES_ENDPOINT;
     }
@@ -613,6 +631,8 @@ function wpses_getoptions() {
         if ('' != WP_SES_RETURNPATH) {
             $wpses_options['return_path'] = WP_SES_RETURNPATH;
         }
+    } else if (!isset($wpses_options['return_path'])) {
+        $wpses_options['return_path'] = '';
     }
     if (defined('WP_SES_FROM')) {
         if ('' != WP_SES_FROM) {
@@ -623,6 +643,9 @@ function wpses_getoptions() {
         if ('' != WP_SES_REPLYTO) {
             $wpses_options['reply_to'] = WP_SES_REPLYTO;
         }
+    }
+    if (!isset($wpses_options['active'])) {
+        $wpses_options['active'] = 0;
     }
     if (defined('WP_SES_AUTOACTIVATE')) {
         if (WP_SES_AUTOACTIVATE) {
