@@ -172,7 +172,7 @@ function wpses_options() {
             wpses_log('Normal activation');
             update_option('wpses_options', $wpses_options);
             echo '<div id="message" class="updated fade">
-                            <p>' . __('Plugin is activated and functionnal', 'wpses') . '</p>
+                            <p>' . __('Plugin is activated and functional', 'wpses') . '</p>
                             </div>' . "\n";
         }
     }
