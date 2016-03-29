@@ -142,12 +142,10 @@ function wpses_options() {
         if ($senders[$wpses_options['from_email']][1] === TRUE) { //
             // email exp enregistré non vide et listé, on peut donc supposer que credentials ok et exp ok.
             if ($wpses_options['credentials_ok'] == 0) {
-                $wpses_options['credentials_ok'] = 1;
                 wpses_log('Credentials ok');
                 update_option('wpses_options', $wpses_options);
             }
             if ($wpses_options['sender_ok'] == 0) {
-                $wpses_options['sender_ok'] = 1;
                 wpses_log('Sender Ok');
                 update_option('wpses_options', $wpses_options);
             }
@@ -163,7 +161,8 @@ function wpses_options() {
         $wpses_options['force'] = 0;
         if (1 == $_POST['force']) {
             // bad hack to force plugin activation with IAM credentials
-            $wpses_options['sender_ok'] == 1;
+            $wpses_options['sender_ok'] = 1;
+            $wpses_options['credentials_ok'] = 1;
             $wpses_options['force'] = 1;
             wpses_log('Forced activation');
         }
