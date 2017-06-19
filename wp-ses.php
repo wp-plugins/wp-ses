@@ -87,7 +87,7 @@ function wpses_install() {
 function wpses_options() {
     global $wpdb, $wpses_options;
     global $current_user;
-    get_currentuserinfo();
+    wp_get_current_user();
     if (!in_array('administrator', $current_user->roles)) {
         //die('Pas admin');
     }
